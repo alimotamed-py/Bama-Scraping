@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import json
 import pandas as pd
+from utility import convert_price, convert_description
 
 cars = []
 with open('carurl.txt') as car_url:
@@ -25,17 +26,11 @@ for url in cars_url:
     real_model = model[1].text.strip()
     time = soup.find(class_='bama-ad-detail-title__ad-time')
     price = soup.find(class_='bama-ad-detail-price__price')
-    if price.text.strip() == 'توافقی':
-        price = price.text.strip()
-    else:
-        price = float(price.text.replace(',', ''))
-
+    price = convert_price(price)
     location = soup.find(class_='address-text')
     description = soup.find(class_='description')
-    if description:
-        description = description.text
-    else:
-        description = ''
+    description = convert_description(description)
+
 
     # _____________________________________________________
 
